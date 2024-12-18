@@ -54,3 +54,36 @@ variable "vpc_peering_connection_routes" {
   default = {
   }
 }
+
+variable "transit_gateways" {
+  type = map(object({
+    description = string
+    name        = string
+  }))
+  default = {
+  }
+}
+
+variable "transit_gateway_attachments" {
+  type = map(object({
+    remote_key  = string
+    vpc_key     = string
+    subnet_keys = list(string) #Module 'network' > 'output' > 'public_subnets and private_subnets'
+    tg_key      = string       #Key will be from "var.transit_gateways"
+    name        = string
+  }))
+  default = {
+  }
+}
+
+variable "transit_gateway_routes" {
+  type = map(object({
+    source_remote_key       = string
+    source_rt_key           = string #Module 'network' > 'output' > 'route_tables'
+    dest_remote_key         = string
+    dest_cidr_block_vpc_key = string #Module 'network' > 'output' > 'vpcs' contains the CIDR
+    tg_key                  = string #Key will be from "var.transit_gateways"
+  }))
+  default = {
+  }
+}
